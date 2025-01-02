@@ -54,8 +54,6 @@ int	main(int argc, char **argv, char **envp)
 
 	if (argc != 5)
 		return (perror(ERROR_MSG), -1);
-	if (argv[2][0] == '\0' || argv[3][0] == '\0')
-		return (perror("Error Invalid command"), -1);
 	if (pipe(fd) == -1)
 		return (perror("Error creating pipe"), -1);
 	pid = fork();
