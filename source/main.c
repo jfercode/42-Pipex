@@ -15,7 +15,7 @@
 // Child process function
 static void	child_process(int *fd, char **argv, char **envp)
 {
-	int fd_in;
+	int	fd_in;
 
 	fd_in = open(argv[1], O_RDONLY, 0777);
 	if (fd_in == -1)
@@ -31,7 +31,7 @@ static void	child_process(int *fd, char **argv, char **envp)
 // Parent process function
 static void	parent_process(int *fd, char **argv, char **envp)
 {
-	int fd_out;
+	int	fd_out;
 	int	status;
 
 	fd_out = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
@@ -58,7 +58,7 @@ int	main(int argc, char **argv, char **envp)
 		return (perror("Error creating pipe"), -1);
 	pid = fork();
 	if (pid == -1)
- 		return (perror("Error creating the calling process clone"), -1);
+		return (perror("Error creating the calling process clone"), -1);
 	if (pid == 0)
 		child_process(fd, argv, envp);
 	parent_process(fd, argv, envp);

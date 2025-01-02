@@ -67,6 +67,6 @@ void	ft_execute_cmd(char *argv, char **envp)
 		while (cmd[i])
 			free(cmd[i++]);
 		free(cmd);
-			return (perror("Error executing command"), exit(1));
-    }
+		return (perror("Error executing command"), exit(1));
+	}
 }

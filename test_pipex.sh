@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Directorios para entradas, salidas, esperadas y logs
-mkdir -p inputs outputs expected
-
 # Variables globales
 TESTS=0
 PASSED=0
@@ -13,6 +10,14 @@ print_header() {
     echo "============================"
     echo "Running tests for pipex..."
     echo "============================"
+}
+
+# Función para verificar si el ejecutable 'pipex' está disponible
+check_executable() {
+    if ! [ -x "./pipex" ]; then
+        echo "Error: 'pipex' executable not found or not executable."
+        exit 1
+    fi
 }
 
 # Función para ejecutar un caso de prueba
@@ -71,6 +76,7 @@ run_test() {
 # Función para generar resultados esperados
 generate_expected() {
     echo "Generating expected results..."
+    mkdir -p inputs outputs expected
     echo "line1" > inputs/infile
     echo "line2" >> inputs/infile
     cat inputs/infile > expected/out1
@@ -84,8 +90,13 @@ generate_expected() {
 
 # Función principal
 main() {
-    print_header
+    # Verificar si el ejecutable 'pipex' existe antes de continuar
+    check_executable
+
+    # Crear los directorios necesarios solo si 'pipex' está presente
     generate_expected
+
+    print_header
 
     # Eliminar el archivo de fallos si existe de ejecuciones anteriores
     rm -f "$FAILED_LOG"
@@ -103,14 +114,14 @@ main() {
         "./pipex inputs/infile 'grep line2' 'cat' outputs/out3" \
         "expected/out3" "outputs/out3" 0
 
-	# Prueba de comandos vacio
-	run_test "Empty command 1" \
-    	"./pipex inputs/infile '' 'cat' outputs/empty_cmd" \
-    	"/dev/null" "outputs/empty_cmd" 1
-	
-	run_test "Empty command 2" \
-    	"./pipex inputs/infile 'cat' '' outputs/empty_cmd" \
-    	"/dev/null" "outputs/empty_cmd" 1
+    # Prueba de comandos vacios
+    run_test "Empty command 1" \
+        "./pipex inputs/infile '' 'cat' outputs/empty_cmd" \
+        "/dev/null" "outputs/empty_cmd" 1
+    
+    run_test "Empty command 2" \
+        "./pipex inputs/infile 'cat' '' outputs/empty_cmd" \
+        "/dev/null" "outputs/empty_cmd" 1
 
     # Manejo de errores
     run_test "Non-existent input file" \
