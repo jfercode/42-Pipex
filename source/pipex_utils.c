@@ -36,10 +36,10 @@ char	*ft_find_path(char *cmd, char **envp)
 		i++;
 	}
 	i = 0;
-	while (paths[++i])
-		free(paths[i]);
+	while (paths[i])
+		free(paths[i++]);
 	free(paths);
-	return (0);	
+	return (NULL);
 }
 
 // Function to execute the command
@@ -51,17 +51,22 @@ void	ft_execute_cmd(char *argv, char **envp)
 
 	i = 0;
 	cmd = ft_split(argv, ' ');
+	if (!envp || !cmd[0])
+		return (perror("Invalid command"), exit(1));
 	path = ft_find_path(cmd[0], envp);
 	if (!path)
 	{
-		while (cmd)
-		{
-			free (cmd[i]);
-			i++;
-		}
+		while (cmd[i])
+			free (cmd[i++]);
 		free (cmd);
 		return (perror("Command not found"), exit(1));
 	}
 	if (execve(path, cmd, envp) == -1)
-		return (perror("Error executing command"), exit(1));
+	{
+		free(path);
+		while (cmd[i])
+			free(cmd[i++]);
+		free(cmd);
+			return (perror("Error executing command"), exit(1));
+    }
 }

@@ -26,6 +26,8 @@ $(NAME):  $(FT_PRINTF_LIB) $(LIBFT_LIB) $(OBJS)
 	@mkdir -p $(OBJ_DIR)
 	@echo "\033[1;32mCREATING STATIC LIBRARY $@\033[0m"
 	ar rcs $@ $^
+	@echo "\033[1;36mCOMPILING AND GENERATE THE EXECUTABLE...\033[0m"
+	$(CC) $(CFLAGS) -o pipex $(OBJ_DIR)/main.o $(NAME) $(FT_PRINTF_LIB) $(LIBFT_LIB)
 
 # Rule to compile .c files into .o
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c
@@ -62,12 +64,7 @@ fclean:	clean
 
 # Rule to rebuild the project
 re:		fclean all
-		@echo "\033[1;34mPROJECT REBUILD.\033[0m"
-
-# Rule to compile and generate the executable
-gen_exec:
-		@echo "\033[1;36mCOMPILING AND GENERATE THE EXECUTABLE...\033[0m"
-		$(CC) $(CFLAGS) -o pipex $(OBJ_DIR)/main.o $(NAME) $(FT_PRINTF_LIB) $(LIBFT_LIB)
+		@echo "\033[1;34mPROJECT REBUILD.\033[0m"		
 
 # Valgrind command: valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes ./pipex infile cmd1 cmd2 outfile
 

@@ -15,7 +15,7 @@
 
 # define ERROR_MSG "Expected: ./pipex <infile> <cmd> <cmd> <outfile>\n"
 
-# include <sys/wait.h>
+#include <sys/wait.h>
 #include "../source/ft_libft/include/libft.h"
 #include "../source/ft_printf/include/ft_printf.h"
 
