@@ -6,11 +6,7 @@
 
 Un pipe es un mecanismo para la comunicación entre procesos que permite pasar datos de un proceso a otro en un flujo unidireccional. En sistemas Unix, el operador pipe (`|`) se usa para pasar la salida de un comando como entrada a otro.
 
-<div align="center">
-  <img src="https://github.com/jfercode/42-Pipex/blob/main/assets/Pipe.png" alt="pipe.png" width="200">
-</div>
-
-Al inicio, tendrás dos comandos que deseas conectar usando un pipe. El objetivo es implementar un programa que imite el comportamiento del comando de shell `|`.
+El objetivo es implementar un programa que imite el comportamiento del comando de shell `|` dado un teniendo como base un fichero (con permisos de lectura al menos) y indicando un segundo fichero donde va a salir el resultado de la operación.
 
 Aquí están las operaciones que usa el programa:
 
