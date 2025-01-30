@@ -41,7 +41,7 @@ Una vez generado el archivo `pipex`, podrás ejecutarlo pasándole dos comandos 
 Ten en cuenta que el programa devolverá Error si se topa con uno de los siguientes casos:
 - Si alguno de los comandos no existen: `./pipex infile.txt "error_cmd" "ls -l" out.txt`
 - Si no se mandan como parametros (y su orden cambia) el archivo de entrada, el cmd1, el cmd2 y el archivo de salida: `./pipex "ls -l" "wc -w" out.txt`
-- Hay otros errores como que la ruta absoluta (`$PATH`) esta unseteada o trabaja sin el environment: `envp -i ./pipex infile.ber "sleep 1" "sleep 2" out.txt`
+- Hay otros errores como que la ruta absoluta (`$PATH`) esta unseteada o trabaja sin el environment: `env -i ./pipex infile.ber "sleep 1" "sleep 2" out.txt`
 
 ## Configuración ⚙️
 
