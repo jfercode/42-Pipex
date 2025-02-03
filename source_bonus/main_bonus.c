@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaferna2 <jaferna2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaferna2 <jaferna2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 10:30:17 by jaferna2          #+#    #+#             */
-/*   Updated: 2025/02/03 12:54:05 by jaferna2         ###   ########.fr       */
+/*   Updated: 2024/12/27 11:51:17 by jaferna2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ static void	parent_process(int *fd, char **argv, char **envp)
 	int	fd_out;
 	int	status;
 
-	waitpid(-1, &status, 0);
 	fd_out = open(argv[4], O_WRONLY | O_CREAT | O_TRUNC, 0777);
 	if (fd_out == -1)
 		return (perror("Error opening output file"), exit(1));
@@ -42,7 +41,10 @@ static void	parent_process(int *fd, char **argv, char **envp)
 		return (perror("Error dup2 failed"), exit(1));
 	close(fd[1]);
 	waitpid(-1, &status, 0);
-	ft_execute_cmd(argv[3], envp);
+	if (WIFEXITED(status) && WEXITSTATUS(status) == 0)
+		ft_execute_cmd(argv[3], envp);
+	else
+		exit(1);
 }
 
 int	main(int argc, char **argv, char **envp)

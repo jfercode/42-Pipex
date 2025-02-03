@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex_utils.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jaferna2 <jaferna2@student.42.fr>          +#+  +:+       +#+        */
+/*   By: jaferna2 <jaferna2@student.42madrid.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 11:20:24 by jaferna2          #+#    #+#             */
-/*   Updated: 2025/02/03 12:51:23 by jaferna2         ###   ########.fr       */
+/*   Updated: 2024/12/27 11:55:47 by jaferna2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,14 @@ void	ft_execute_cmd(char *argv, char **envp)
 	i = 0;
 	cmd = ft_split(argv, ' ');
 	if (!envp || !cmd[0])
-		return (perror("Invalid command"), free(cmd), exit(127));
+		return (perror("Invalid command"), exit(1));
 	path = ft_find_path(cmd[0], envp);
 	if (!path)
 	{
 		while (cmd[i])
 			free (cmd[i++]);
 		free (cmd);
-		return (perror("Command not found"), exit(127));
+		return (perror("Command not found"), exit(1));
 	}
 	if (execve(path, cmd, envp) == -1)
 	{
@@ -67,6 +67,6 @@ void	ft_execute_cmd(char *argv, char **envp)
 		while (cmd[i])
 			free(cmd[i++]);
 		free(cmd);
-		return (perror("Error executing command"), exit(127));
+		return (perror("Error executing command"), exit(1));
 	}
 }
