@@ -6,7 +6,7 @@
 /*   By: jaferna2 <jaferna2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 10:30:17 by jaferna2          #+#    #+#             */
-/*   Updated: 2025/02/03 12:54:05 by jaferna2         ###   ########.fr       */
+/*   Updated: 2025/02/07 16:20:27 by jaferna2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,6 @@ static void	parent_process(int *fd, char **argv, char **envp)
 	if (dup2(fd[0], STDIN_FILENO) == -1 || dup2(fd_out, STDOUT_FILENO) == -1)
 		return (perror("Error dup2 failed"), exit(1));
 	close(fd[1]);
-	waitpid(-1, &status, 0);
 	ft_execute_cmd(argv[3], envp);
 }
 
@@ -59,6 +58,7 @@ int	main(int argc, char **argv, char **envp)
 		return (perror("Error creating the calling process clone"), -1);
 	if (pid == 0)
 		child_process(fd, argv, envp);
-	parent_process(fd, argv, envp);
+	else
+		parent_process(fd, argv, envp);
 	return (0);
 }

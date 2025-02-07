@@ -15,8 +15,8 @@ LIBFT_DIR = 		source/ft_libft
 FT_PRINTF_DIR = 	source/ft_printf
 
 # Source files
-SRC_FILES = 		$(SRC_DIR)/main.c	$(SRC_DIR)/pipex_utils.c 
-SRC_BONUS_FILES = 	$(SRC_BONUS_DIRR)/main_bonus.c	$(SRC_BONUS_DIR)/pipex_utils_bonus.c
+SRC_FILES = 		$(SRC_DIR)/main.c				$(SRC_DIR)/pipex_utils.c 
+SRC_BONUS_FILES = 	$(SRC_BONUS_DIR)/main_bonus.c	$(SRC_BONUS_DIR)/pipex_utils_bonus.c
 
 # Objects files
 OBJS = 				$(SRC_FILES:$(SRC_DIR)/%.c=$(OBJ_DIR)/%.o)
@@ -27,9 +27,9 @@ LIBFT_LIB = 		$(LIBFT_DIR)/build/libft.a
 FT_PRINTF_LIB = 	$(FT_PRINTF_DIR)/build/ft_printf.a
 
 # Default rule
-all: $(NAME)
+all: $(NAME) $(BONUS)
 
-$(NAME):  $(FT_PRINTF_LIB) $(LIBFT_LIB) $(OBJS)
+$(NAME):  $(FT_PRINTF_LIB) $(LIBFT_LIB) $(OBJS) 
 	@mkdir -p $(OBJ_DIR)
 	@echo "\033[1;32mCREATING STATIC LIBRARY $@\033[0m"
 	ar rcs $@ $^
@@ -79,7 +79,7 @@ fclean:	clean
 
 # Rule to rebuild the project
 re:		fclean all
-		@echo "\033[1;34mPROJECT REBUILD.\033[0m"		
+		@echo "\033[1;34mPROJECT REBUILD.\033[0m"
 
 # Bonus rule (compiles the bonus files and generates a bonus executable)
 bonus: $(BONUS)
