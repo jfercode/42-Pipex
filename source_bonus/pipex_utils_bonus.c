@@ -6,13 +6,28 @@
 /*   By: jaferna2 <jaferna2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/27 11:20:24 by jaferna2          #+#    #+#             */
-/*   Updated: 2025/02/10 15:04:05 by jaferna2         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:26:25 by jaferna2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex_bonus.h"
 
-// Function to find the path of the command
+/**
+ * @brief Finds the full path of a command using the system's PATH 
+ * environment variable.
+ *
+ * Searches through each directory listed in the PATH environment variable,
+ * appending the command name to each path, and checks if the command exists 
+ * using `access()`. 
+ * 
+ * Returns the first valid path found.
+ *
+ * Memory allocated for temporary paths is freed to prevent leaks.
+ *
+ * @param cmd  The command to find (e.g., "ls", "grep").
+ * @param envp The environment variables containing the PATH.
+ * @return The full path to the executable if found, or NULL if not found.
+ */
 char	*ft_find_path(char *cmd, char **envp)
 {
 	char	**paths;
@@ -42,7 +57,21 @@ char	*ft_find_path(char *cmd, char **envp)
 	return (NULL);
 }
 
-// Function to execute the command
+/**
+ * @brief Executes a command using the provided environment variables.
+ *
+ * Splits the command string into arguments, locates the executable path,
+ * and attempts to run the command with `execve`. 
+ * Handles errors related to:
+ * - Invalid commands
+ * - Command not found
+ * - Execution failures
+ *
+ * Frees allocated memory in case of errors to prevent memory leaks.
+ *
+ * @param argv The command string to execute.
+ * @param envp The environment variables used by the new process.
+ */
 void	ft_execute_cmd(char *argv, char **envp)
 {
 	char	**cmd;
@@ -71,7 +100,23 @@ void	ft_execute_cmd(char *argv, char **envp)
 	}
 }
 
-// Function that returns the number of pipes for the program
+/**
+ * @brief Counts the number of pipes needed based on the provided commands.
+ *
+ * Calculates the number of commands that require piping. 
+ * The starting index is adjusted depending on whether
+ * here-document mode is active:
+ * - Starts from index 3 if using here-document (skipping "here_doc",
+ *  LIMITER, and file).
+ * - Starts from index 2 otherwise (skipping input and output files).
+ *
+ * The total number of pipes is the number of commands minus 1, 
+ * as each pipe connects two commands.
+ *
+ * @param argv       Argument vector containing commands and files.
+ * @param pipe_data  Pipe data structure with here-document information.
+ * @return The total number of pipes required.
+ */
 int	ft_count_pipes(char **argv, t_pipe_data pipe_data)
 {
 	int	i;
@@ -91,7 +136,29 @@ int	ft_count_pipes(char **argv, t_pipe_data pipe_data)
 	return (pipes - 2);
 }
 
-// Function that returns the cmd to be executed in the pipes (child/parent)
+/**
+ * @brief Retrieves the command to be executed based on 
+ * the current index and mode.
+ *
+ * Determines the correct command from the argument 
+ * vector considering whether here-document mode is active. 
+ * The offset is adjusted accordingly:
+ * - Offset = 3 if using here-document 
+ * (accounts for "here_doc", LIMITER, and file).
+ * - Offset = 2 otherwise (input file and output file).
+ * 
+ * The function distinguishes between input and output commands:
+ * - For input commands (IS_CMD_IN), it checks the current index.
+ * - For output commands (IS_CMD_OUT), it checks the next index.
+ *
+ * @param argv       Argument vector containing commands and files.
+ * @param indx       Index of the current command.
+ * @param is_in      Flag indicating if the command is input 
+ * (IS_CMD_IN) or output (IS_CMD_OUT).
+ * @param pipe_data  Pipe data structure with here-document info.
+ * @return The command string if valid, or NULL if the command 
+ * is empty or invalid.
+ */
 char	*ft_obtain_cmd(char **argv, int indx, int is_in, t_pipe_data pipe_data)
 {
 	int	offset;
@@ -114,7 +181,22 @@ char	*ft_obtain_cmd(char **argv, int indx, int is_in, t_pipe_data pipe_data)
 	return (NULL);
 }
 
-/// SE PREPARAN TODAS LAS VARIABLES PARA LA EJECUCION DEL PROGRAMA
+/**
+ * @brief Prepares the pipe data structure for the pipex program.
+ *
+ * Determines if here-document mode is active based on the first argument.
+ * Sets the total number of pipes and handles the opening of input/output files:
+ * - If here-document is used, it processes the input and opens 
+ * the temporary file.
+ * - Otherwise, it opens the specified input file in read-only mode.
+ * The output file is opened in append mode for here-document, 
+ * or truncated otherwise.
+ *
+ * @param argc       Argument count.
+ * @param argv       Argument vector containing file names, 
+ * commands, and options.
+ * @param pipe_data  Pointer to the pipe data structure to be initialized.
+ */
 void	ft_prepare_for_pipex(int argc, char **argv, t_pipe_data **pipe_data)
 {
 	if (ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1])) == 0)

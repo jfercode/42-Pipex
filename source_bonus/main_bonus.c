@@ -6,12 +6,22 @@
 /*   By: jaferna2 <jaferna2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/26 10:30:17 by jaferna2          #+#    #+#             */
-/*   Updated: 2025/02/10 15:04:05 by jaferna2         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:27:46 by jaferna2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/pipex_bonus.h"
 
+/**
+ * @brief Removes the trailing newline character from a string.
+ *
+ * If the string is non-null and ends with a newline ('\n'),
+ * this function replaces it with a null terminator.
+ *
+ * @param line The string to process.
+ * @return The modified string without a trailing newline, 
+ * or NULL if the input is NULL.
+ */
 static char	*remove_newline(char *line)
 {
 	size_t	len;
@@ -24,6 +34,18 @@ static char	*remove_newline(char *line)
 	return (line);
 }
 
+/**
+ * @brief Processes here-document input.
+ *
+ * Opens a temporary file and repeatedly prompts the user with "heredoc> "
+ *  to read input.
+ * Each line (after removing its newline) is compared with the delimiter;
+ *  if it matches, the file is closed and IS_HEREDOC is returned. 
+ * Otherwise, the line is written to the file.
+ *
+ * @param delimiter The string that terminates the here-document input.
+ * @return IS_HEREDOC when the delimiter is encountered, or 0 if an error occurs.
+ */
 int	ft_handle_here_doc(char *delimiter)
 {
 	int		tmp_fd;
@@ -49,6 +71,18 @@ int	ft_handle_here_doc(char *delimiter)
 	return (NOT_HEREDOC);
 }
 
+/**
+ * @brief Manages the child process after fork.
+ *
+ * For the first command, redirects STDIN from fd_in.
+ * Then, it redirects STDOUT to the pipe's write end, closes unused descriptors,
+ * obtains the command (with IS_CMD_IN flag), and executes it.
+ *
+ * @param pipe_data Structure containing pipe descriptors and related data.
+ * @param argv      Array of command arguments.
+ * @param envp      Array of environment variables.
+ * @param indx      Index of the current command.
+ */
 static void	child_process(t_pipe_data pipe_data, char **argv,
 					char **envp, int indx)
 {
@@ -69,6 +103,19 @@ static void	child_process(t_pipe_data pipe_data, char **argv,
 	ft_execute_cmd(cmd, envp);
 }
 
+/**
+ * @brief Manages the parent process after fork.
+ *
+ * Waits for the child process to finish, closes the write end of the pipe,
+ * and redirects the standard input to the read end. 
+ * If it's the last command,it also redirects the standard output to fd_out,
+ * obtains, and executes the command.
+ *
+ * @param pipe_data Structure containing pipe descriptors and other related data.
+ * @param argv      Array of command arguments.
+ * @param envp      Environment variables.
+ * @param indx      Index of the current command.
+ */
 static void	parent_process(t_pipe_data pipe_data, char **argv,
 					char **envp, int indx)
 {
@@ -94,7 +141,22 @@ static void	parent_process(t_pipe_data pipe_data, char **argv,
 			return (perror("Error child dup2 failed"), exit(1));
 }
 
-///		IN ->	CMD	|	CMD	| ... | CMD  -> OUT
+/**
+ * @brief Entry point for the pipex program.
+ *
+ * Initializes the pipe data structure and sets up the pipeline 
+ * for multiple commands.
+ * For each command, it creates a pipe and forks a child process:
+ * - The child process handles command execution.
+ * - The parent process manages redirection and process synchronization.
+ *
+ * If a here-document is used, the temporary file is deleted after execution.
+ *
+ * @param argc Argument count.
+ * @param argv Argument vector (program name, files, commands, etc.).
+ * @param envp Environment variables.
+ * @return EXIT_SUCCESS on successful execution, or an error code on failure.
+ */
 int	main(int argc, char **argv, char **envp)
 {
 	int			i;

@@ -92,7 +92,7 @@ $(BONUS): $(FT_PRINTF_LIB) $(LIBFT_LIB) $(BONUS_OBJS)
 	@echo "\033[1;36mCOMPILING AND GENERATING EXECUTABLE...\033[0m"
 	$(CC) $(CFLAGS) -o pipex_bonus $(BONUS_OBJS_DIR)/main_bonus.o $(BONUS) $(FT_PRINTF_LIB) $(LIBFT_LIB)
 
-# Valgrind command: valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes ./pipex infile cmd1 cmd2 outfile
+# Valgrind command:	valgrind --leak-check=full --show-leak-kinds=all --trace-children=yes ./pipex infile cmd1 cmd2 outfile
 
 # Phony rules
 .PHONY:	all clean fclean re bonus
