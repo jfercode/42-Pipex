@@ -6,12 +6,12 @@
 /*   By: jaferna2 <jaferna2@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 10:39:30 by jaferna2          #+#    #+#             */
-/*   Updated: 2025/02/07 12:58:31 by jaferna2         ###   ########.fr       */
+/*   Updated: 2025/02/10 15:04:32 by jaferna2         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PIPEX_H
-# define PIPEX_H
+#ifndef PIPEX_BONUS_H
+# define PIPEX_BONUS_H
 
 # define ERROR_MSG "Expected: ./pipex <infile> <cmd> <cmd> <outfile>\n"
 
@@ -37,7 +37,9 @@ typedef struct s_pipe_data
 }			t_pipe_data;
 
 void	ft_execute_cmd(char *argv, char **envp);
+void	ft_prepare_for_pipex(int argc, char **argv, t_pipe_data **pipe_data);
 
+int		ft_handle_here_doc(char *delimiter);
 int		ft_count_pipes(char **argv, t_pipe_data pipe_data);
 
 char	*ft_find_path(char *cmd, char **envp);
