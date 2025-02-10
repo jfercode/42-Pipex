@@ -35,6 +35,14 @@ Una vez generado el archivo `pipex`, podrás ejecutarlo pasándole dos comandos 
 
 ./pipex infile.ber "sleep 1" "sleep 2" out.txt
 ```
+## Actualización del Bonus ✨
+
+Actualmente se ha añadido el bonus a este proyecto, que consiste básicamente en admitir `más de dos comandos` al programa de manera que ya gestiona multiples pipes y usar `here doc` como input_file 
+```sh
+./pipex_bonus here_doc [Delimeter] "cat" "grep pipex" "rev" [output_file]
+
+./pipex_bonus [input_file] "cat" "grep a" "wc -w" [output_file]
+```
 
 ### Casos de error ⚠️
 
